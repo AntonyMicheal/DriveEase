@@ -11,6 +11,7 @@ class VehicleCreate(BaseModel):
     daily_rate: float = 0
     battery_range_km: Optional[int] = None
     location: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class VehicleUpdate(BaseModel):
@@ -23,6 +24,7 @@ class VehicleUpdate(BaseModel):
     battery_range_km: Optional[int] = None
     location: Optional[str] = None
     is_available: Optional[bool] = None
+    image_url: Optional[str] = None
 
 class VehicleOut(BaseModel):
     id: int
@@ -35,5 +37,6 @@ class VehicleOut(BaseModel):
     battery_range_km: Optional[int] = None
     location: Optional[str] = None
     is_available: bool
+    image_url: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)

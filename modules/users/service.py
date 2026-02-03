@@ -33,6 +33,7 @@ def create_user(
         hashed_password=password_hash,
         full_name=data.full_name,
         phone=data.phone,
+        avatar_url=data.avatar_url,
         is_admin=is_admin,
     )
     db.add(user)
@@ -50,6 +51,8 @@ def update_user(db: Session, user: User, data: UserUpdate) -> User:
         user.is_active = data.is_active
     if data.is_admin is not None:
         user.is_admin = data.is_admin
+    if data.avatar_url is not None:
+        user.avatar_url = data.avatar_url
     if data.password:
         user.hashed_password = get_password_hash(data.password)
     db.add(user)

@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from core.dependencies import get_db
+from core.uploads import save_image_upload
 from modules.vehicle import service, schema
 from modules.auth.dependencies import get_current_admin
 
@@ -52,3 +53,18 @@ def delete_vehicle(
         raise HTTPException(status_code=404, detail="Vehicle not found")
     service.delete_vehicle(db, vehicle)
     return {"status": "deleted"}
+
+
+@router.post("/{vehicle_id}/image", response_model=schema.VehicleOut)
+def upload_vehicle_image(
+    vehicle_id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    _: str = Depends(get_current_admin),
+):
+    vehicle = service.get_vehicle(db, vehicle_id)
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+    image_url = save_image_upload(file, "vehicles")
+    payload = schema.VehicleUpdate(image_url=image_url)
+    return service.update_vehicle(db, vehicle, payload)

@@ -4,11 +4,25 @@ DriveEase is a smart, user-friendly electric vehicle (EV) rental platform design
 ## What We Have Built
 - Auth and user management with JWT-based login and admin gating.
 - Vehicle catalog with admin CRUD plus public listing and detail endpoints.
+- Vehicle image uploads with public media serving.
 - Booking workflow with pricing, overlap protection, and cancel/status updates.
 - Availability blocking to reserve or pause vehicles by date range.
 - Payment records tied to bookings with access control.
 - PostgreSQL integration with SQLAlchemy models and auto table creation on startup.
 - CORS configuration and a health check endpoint.
+- User avatar uploads (optional) with stored profile image URLs.
+
+## Release Notes (February 3, 2026)
+- Added media storage and static serving at `MEDIA_URL` (default `/media`).
+- Vehicles now support an optional `image_url` field.
+- Users now support an optional `avatar_url` field.
+- New upload endpoints:
+  - `POST /api/vehicles/{vehicle_id}/image` (admin only)
+  - `POST /api/users/me/avatar` (current user)
+  - Both accept `multipart/form-data` with a `file` field (JPEG/PNG/WEBP).
+- Database changes:
+  - `vehicles.image_url` (nullable)
+  - `users.avatar_url` (nullable)
 
 ## Tech Stack
 - FastAPI, SQLAlchemy, Pydantic
@@ -72,7 +86,7 @@ uvicorn main:app --reload
 | Table | Key Columns | Notes |
 | --- | --- | --- |
 | `users` | `id`, `email`, `hashed_password`, `is_active`, `is_admin`, `created_at` | Email is unique; first user becomes admin |
-| `vehicles` | `id`, `name`, `type`, `daily_rate`, `battery_range_km`, `is_available` | Vehicles can be blocked or booked |
+| `vehicles` | `id`, `name`, `type`, `daily_rate`, `battery_range_km`, `is_available`, `image_url` | Vehicles can be blocked or booked |
 | `bookings` | `id`, `user_id`, `vehicle_id`, `start_date`, `end_date`, `status`, `total_price` | Linked to `users` and `vehicles` |
 | `availability_blocks` | `id`, `vehicle_id`, `start_date`, `end_date`, `reason` | Admin-only date blocking |
 | `payments` | `id`, `booking_id`, `amount`, `currency`, `status`, `provider` | Linked to `bookings` |

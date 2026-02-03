@@ -9,6 +9,7 @@ class UserCreate(BaseModel):
     password: str
     full_name: Optional[str] = None
     phone: Optional[str] = None
+    avatar_url: Optional[str] = None
 
     @field_validator("password")
     @classmethod
@@ -24,6 +25,7 @@ class UserUpdate(BaseModel):
     password: Optional[str] = None
     is_active: Optional[bool] = None
     is_admin: Optional[bool] = None
+    avatar_url: Optional[str] = None
 
     @field_validator("password")
     @classmethod
@@ -42,6 +44,7 @@ class UserOut(BaseModel):
     phone: Optional[str] = None
     is_active: bool
     is_admin: bool
+    avatar_url: Optional[str] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

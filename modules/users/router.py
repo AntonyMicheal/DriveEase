@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 
 from core.dependencies import get_db
+from core.uploads import save_image_upload
 from modules.auth.dependencies import get_current_active_user, get_current_admin
 from modules.users import schema, service
 
@@ -19,6 +20,17 @@ def update_me(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_active_user),
 ):
+    return service.update_user(db, current_user, payload)
+
+
+@router.post("/me/avatar", response_model=schema.UserOut)
+def upload_my_avatar(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_active_user),
+):
+    avatar_url = save_image_upload(file, "users")
+    payload = schema.UserUpdate(avatar_url=avatar_url)
     return service.update_user(db, current_user, payload)
 
 

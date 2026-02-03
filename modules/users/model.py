@@ -15,6 +15,7 @@ class User(Base):
     phone = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+    avatar_url = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     bookings = relationship("Booking", back_populates="user")

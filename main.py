@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from modules.auth.router import router as auth_router
@@ -11,6 +12,8 @@ from core.config import settings
 from db.init_db import init_db
 
 app = FastAPI(title="DriveEase EV Rental Backend")
+
+app.mount(settings.MEDIA_URL, StaticFiles(directory=settings.MEDIA_ROOT), name="media")
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])

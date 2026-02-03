@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24
     CORS_ORIGINS: str = "*"
+    MEDIA_URL: str = "/media"
+    MEDIA_ROOT: str = "media"
 
     SQLALCHEMY_DATABASE_URI: str | None = None
 
